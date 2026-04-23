@@ -18,3 +18,6 @@ O L-GPPS transforma fiscalizações cidadãs em registros permanentes e auditáv
 - **Memória histórica** — Cria um histórico objetivo de omissões e respostas institucionais
 
 Este projeto busca construir uma jurisprudência social baseada em evidência real, não apenas em reclamações isoladas.
+
+    Fundamento Técnico: Protocolo L-GPPS
+    O coração da Isonomia-Global é o motor L-GPPS (Ledgerized Geolocation & Privacy-Preserving Security). Ele utiliza o ICF (Índice de Coerência de Fluxo) para verificar se uma denúncia partiu de um deslocamento humano plausível. Isso evita ataques de bots e denúncias falsas coordenadas, pois exige "prova de esforço físico" capturada passivamente pelo rastreador de geolocalização.
