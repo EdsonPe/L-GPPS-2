@@ -1,9 +1,4 @@
 
-
-**"Memória pública imutável de fiscalizações cidadãs. Transforma denúncias em registros permanentes, auditáveis e protegidos, criando uma jurisprudência social baseada em impacto real."**
-
-### README.md (texto completo pra você colar no arquivo README.md):
-
 ```markdown
 # L-GPPS
 
