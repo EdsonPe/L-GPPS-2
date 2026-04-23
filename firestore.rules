@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 1. Core Primitives
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // 2. Validation Helpers
+    function isValidEvent(data) {
+      return data.keys().hasAll(['type', 'description', 'lat', 'lng', 'icf_score', 'timestamp', 'status', 'userId', 'hash_chain'])
+        && data.keys().size() == 9
+        && data.type is string 
+        && data.description is string && data.description.size() <= 1000
+        && data.lat is number
+        && data.lng is number
+        && data.icf_score is number && data.icf_score >= 0 && data.icf_score <= 1.0
+        && data.timestamp is number
+        && data.status in ['pending', 'validated', 'resolved']
+        && data.userId == request.auth.uid
+        && data.hash_chain is string;
+    }
+
+    // 3. User Profiles (Reputation)
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId) && incoming().score == 0 && incoming().level == 1;
+      allow update: if isOwner(userId) 
+        && incoming().diff(existing()).affectedKeys().hasOnly(['score', 'level', 'title']);
+    }
+
+    // 4. Events (Ledger)
+    match /events/{eventId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(eventId) && isValidEvent(incoming());
+      allow update: if false; // Immutability for L0 ledger
+      
+      match /validations/{validationId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn() && isValidId(validationId) 
+          && incoming().validatorId == request.auth.uid
+          && incoming().eventId == eventId;
+      }
+    }
+  }
+}

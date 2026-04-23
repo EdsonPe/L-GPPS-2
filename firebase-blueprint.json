@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "Event": {
+      "title": "Civic Event",
+      "description": "A verified civic incident recorded on the ledger.",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["safety", "infrastructure", "sanitation", "lighting"] },
+        "description": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "icf_score": { "type": "number" },
+        "timestamp": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "validated", "resolved"] },
+        "userId": { "type": "string" },
+        "hash_chain": { "type": "string" }
+      },
+      "required": ["type", "description", "lat", "lng", "icf_score", "timestamp", "status", "userId", "hash_chain"]
+    },
+    "Validation": {
+      "title": "Distributed Validation",
+      "description": "A peer validation of an existing event.",
+      "type": "object",
+      "properties": {
+        "eventId": { "type": "string" },
+        "validatorId": { "type": "string" },
+        "consensus": { "type": "boolean" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["eventId", "validatorId", "consensus", "timestamp"]
+    },
+    "User": {
+      "title": "Civic Reputation",
+      "description": "Anonymous reputation profile of a citizen.",
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "level": { "type": "number" },
+        "title": { "type": "string" }
+      },
+      "required": ["score", "level", "title"]
+    }
+  },
+  "firestore": {
+    "/events/{eventId}": {
+      "schema": "Event",
+      "description": "Public ledger of civic events."
+    },
+    "/events/{eventId}/validations/{validationId}": {
+      "schema": "Validation",
+      "description": "Peer audits for events."
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Civic identity and reputation."
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Isonomia-Global 🏛️🌍",
+  "description": "Infraestrutura cívica descentralizada que transforma navegação humana em evidência territorial auditável via L-GPPS.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}
